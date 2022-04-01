@@ -3,6 +3,7 @@ const tagsContainer = document.querySelector(".tags");
 function tagsHandler(data) {
   addTags(data);
   removeTags(data);
+  filterByTags(data);
 }
 
 function addTags(data) {
@@ -41,10 +42,6 @@ function removeTags(data) {
     if (e.target.closest("img")) {
       e.target.parentNode.remove();
       filterByTags(data);
-    }
-    if (e.target.closest("img") && !tagsContainer.hasChildNodes()) {
-      displayRecipesData(data);
-      filtersListboxHandler(data);
     }
   });
 }

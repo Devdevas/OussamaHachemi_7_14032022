@@ -9,21 +9,24 @@ const searchInput = document.querySelector(".search__input");
 const inputRegEx = new RegExp("^[a-zA-ZÀ-ú0-9 ,'-]{3,}$");
 
 function getWantedData(recipesData) {
-  const wantedData = recipesData.filter((recipe) => {
+  const wantedData = [];
+  for (let recipe of recipesData) {
     const names = recipe.name;
     const descriptions = recipe.description;
     const ingredients = recipe.ingredients.map((el) => {
       return el.ingredient;
     });
-    return (
+    if (
       names.toLowerCase().includes(searchInput.value.toLowerCase()) ||
       descriptions.toLowerCase().includes(searchInput.value.toLowerCase()) ||
       ingredients
         .join(" ")
         .toLowerCase()
         .includes(searchInput.value.toLowerCase())
-    );
-  });
+    ) {
+      wantedData.push(recipe);
+    }
+  }
   displayWantedData(recipesData, wantedData);
 }
 
