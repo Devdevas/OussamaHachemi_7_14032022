@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/1107c941bf.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Les petits plats</title>
+  </head>
+  <body>
+    <div id="block-page">
+      <header>
+        <img src="assets/logo.png" alt="les petits plats accueil" />
+        <p>Les petits plats</p>
+      </header>
+      <main>
+        <nav>
+          <form class="search" action="traitement.php" method="post">
+            <input
+              type="text"
+              class="search__input"
+              name="search"
+              placeholder="Rechercher une recette"
+            />
+            <div class="search__icon">
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </div>
+          </form>
+          <ul class="tags"></ul>
+          <div class="filters">
+            <div
+              class="filters__filter filters__filter--ingredients"
+              data-text="ingredients"
+            >
+              <input
+                type="text"
+                placeholder="Ingrédients"
+                class="filters__input ingredients"
+              />
+              <div class="filters__arrow down">
+                <i class="fas fa-angle-down"></i>
+              </div>
+              <div class="filters__arrow up">
+                <i class="fas fa-angle-up"></i>
+              </div>
+              <ul class="filters__list ingredients__list invisible"></ul>
+            </div>
+            <div
+              class="filters__filter filters__filter--appareils"
+              data-text="appliances"
+            >
+              <input
+                type="text"
+                placeholder="Appareils"
+                class="filters__input appareils"
+              />
+              <div class="filters__arrow down">
+                <i class="fas fa-angle-down"></i>
+              </div>
+              <div class="filters__arrow up">
+                <i class="fas fa-angle-up"></i>
+              </div>
+              <ul class="filters__list appareils__list invisible"></ul>
+            </div>
+            <div
+              class="filters__filter filters__filter--ustensiles"
+              data-text="ustensils"
+            >
+              <input
+                type="text"
+                placeholder="Ustensiles"
+                class="filters__input ustensiles"
+              />
+              <div class="filters__arrow down">
+                <i class="fas fa-angle-down"></i>
+              </div>
+              <div class="filters__arrow up">
+                <i class="fas fa-angle-up"></i>
+              </div>
+              <ul class="filters__list ustensiles__list invisible"></ul>
+            </div>
+          </div>
+        </nav>
+        <section class="articles-section"></section>
+      </main>
+      <footer></footer>
+    </div>
+    <script src="scripts/filter.js"></script>
+    <script src="scripts/recipeCard.js"></script>
+    <script src="scripts/filtersListbox.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/tags.js"></script>
+  </body>
+</html>

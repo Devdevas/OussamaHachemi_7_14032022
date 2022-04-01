@@ -1,0 +1,12 @@
+{
+  "name": "les-petits-plats",
+  "version": "1.0.0",
+  "description": "OpenClassRooms Projet_7",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch ./sass/main.scss:./css/style.css"
+  },
+  "author": "Oussama Hachemi",
+  "license": "ISC"
+}
