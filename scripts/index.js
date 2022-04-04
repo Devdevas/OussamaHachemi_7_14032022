@@ -10,7 +10,7 @@ const inputRegEx = new RegExp("^[a-zA-ZÀ-ú0-9 ,'-]{3,}$");
 
 function getWantedData(recipesData) {
   const wantedData = [];
-  for (let recipe of recipesData) {
+  for (const recipe of recipesData) {
     const names = recipe.name;
     const descriptions = recipe.description;
     const ingredients = recipe.ingredients.map((el) => {

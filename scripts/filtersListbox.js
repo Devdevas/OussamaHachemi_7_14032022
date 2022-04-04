@@ -1,21 +1,21 @@
-const filters = document.querySelector(".filters");
-const filter = document.querySelectorAll(".filters__filter");
+
+const filters = document.querySelectorAll(".filters__filter");
 const filtersList = document.querySelectorAll(".filters__list");
 const filtersInput = document.querySelectorAll(".filters__input");
 const arrowUp = document.querySelectorAll(".up");
 const arrowDown = document.querySelectorAll(".down");
 
 function filtersListboxHandler(data) {
-  filter.forEach((element) => {
-    element.addEventListener("click", () => {
+  filters.forEach((filter) => {
+    filter.addEventListener("click", () => {
       displayFiltersList(data);
-      if (element.dataset.text === "ingredients") {
+      if (filter.dataset.text === "ingredients") {
         closeAllFilters();
         openClickedFilter(0, "Rechercher un ingrédient");
-      } else if (element.dataset.text === "appliances") {
+      } else if (filter.dataset.text === "appliances") {
         closeAllFilters();
         openClickedFilter(1, "Rechercher un appareil");
-      } else if (element.dataset.text === "ustensils") {
+      } else if (filter.dataset.text === "ustensils") {
         closeAllFilters();
         openClickedFilter(2, "Rechercher un ustensile");
       }
