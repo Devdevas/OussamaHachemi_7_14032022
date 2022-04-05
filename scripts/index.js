@@ -1,15 +1,15 @@
-async function getRecipesData() {
+async function getRecipes() {
   const data = await fetch("data/recipes.json");
-  const recipesData = await data.json();
+  const recipes = await data.json();
 
-  return { recipesData };
+  return { recipes };
 }
 
 const searchInput = document.querySelector(".search__input");
 const inputRegEx = new RegExp("^[a-zA-ZÀ-ú0-9 ,'-]{3,}$");
 
-function getWantedData(recipesData) {
-  const wantedData = recipesData.filter((recipe) => {
+function getFilteredRecipes(recipes) {
+  const filteredRecipes = recipes.filter((recipe) => {
     const names = recipe.name;
     const descriptions = recipe.description;
     const ingredients = recipe.ingredients.map((el) => {
@@ -24,34 +24,34 @@ function getWantedData(recipesData) {
         .includes(searchInput.value.toLowerCase())
     );
   });
-  displayWantedData(recipesData, wantedData);
+  displayFilteredRecipes(recipes, filteredRecipes);
 }
 
-function displayWantedData(recipesData, wantedData) {
+function displayFilteredRecipes(recipes, filteredRecipes) {
   const isValidInput = inputRegEx.test(searchInput.value);
   if (isValidInput && !tagsContainer.hasChildNodes()) {
-    tagsHandler(wantedData);
-    displayRecipesData(wantedData);
-    filtersListboxHandler(wantedData);
+    tagsHandler(filteredRecipes);
+    displayRecipes(filteredRecipes);
+    filtersListboxHandler(filteredRecipes);
   } else if (!isValidInput && !tagsContainer.hasChildNodes()) {
-    tagsHandler(recipesData);
-    displayRecipesData(recipesData);
-    filtersListboxHandler(recipesData);
+    tagsHandler(recipes);
+    displayRecipes(recipes);
+    filtersListboxHandler(recipes);
   } else if (!isValidInput && tagsContainer.hasChildNodes()) {
-    tagsHandler(recipesData);
+    tagsHandler(recipes);
   } else if (isValidInput && tagsContainer.hasChildNodes()) {
-    tagsHandler(wantedData);
+    tagsHandler(filteredRecipes);
   }
 }
 
-function displayRecipesData(recipesData) {
+function displayRecipes(recipes) {
   const articlesSection = document.querySelector(".articles-section");
-  const articles = recipesData.map((element) => {
+  const articles = recipes.map((element) => {
     const recipeCardDOM = new RecipeCard(element).getRecipeCard();
     return recipeCardDOM;
   });
   articlesSection.innerHTML = articles.join("");
-  if (recipesData.length === 0) {
+  if (recipes.length === 0) {
     articlesSection.innerHTML = `
     <p class="no-result">Aucune recette ne correspond à votre critère…<br>
     vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>`;
@@ -59,12 +59,12 @@ function displayRecipesData(recipesData) {
 }
 
 async function init() {
-  const { recipesData } = await getRecipesData();
+  const { recipes } = await getRecipes();
 
-  displayRecipesData(recipesData);
-  filtersListboxHandler(recipesData);
-  tagsHandler(recipesData);
+  displayRecipes(recipes);
+  filtersListboxHandler(recipes);
+  tagsHandler(recipes);
 
-  searchInput.addEventListener("input", getWantedData.bind(null, recipesData));
+  searchInput.addEventListener("input", getFilteredRecipes.bind(null, recipes));
 }
 init();

@@ -52,7 +52,7 @@ function filterByTags(data) {
     return tag.dataset.text;
   });
 
-  const wantedData = data.filter((element) => {
+  const filteredRecipes = data.filter((element) => {
     const ingredients = element.ingredients.map((el) => {
       return el.ingredient;
     });
@@ -64,6 +64,6 @@ function filterByTags(data) {
       return element;
     }
   });
-  displayRecipesData(wantedData);
-  filtersListboxHandler(wantedData);
+  displayRecipes(filteredRecipes);
+  filtersListboxHandler(filteredRecipes);
 }
