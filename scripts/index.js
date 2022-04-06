@@ -10,23 +10,26 @@ const searchInput = document.querySelector(".search__input");
 //Creat regEx for search input (at least 2 characters to start searching)
 const inputRegEx = new RegExp("^[a-zA-ZÀ-ú0-9 ,'-]{3,}$");
 
-//Search algorithm using the filter method to filter recipes
+//Search algorithm using the "for loop" to filter recipes
 function getFilteredRecipes(recipes) {
-  const filteredRecipes = recipes.filter((recipe) => {
+  const filteredRecipes = [];
+  for (const recipe of recipes) {
     const names = recipe.name;
     const descriptions = recipe.description;
     const ingredients = recipe.ingredients.map((el) => {
       return el.ingredient;
     });
-    return (
+    if (
       names.toLowerCase().includes(searchInput.value.toLowerCase()) ||
       descriptions.toLowerCase().includes(searchInput.value.toLowerCase()) ||
       ingredients
         .join(" ")
         .toLowerCase()
         .includes(searchInput.value.toLowerCase())
-    );
-  });
+    ) {
+      filteredRecipes.push(recipe);
+    }
+  }
   displayFilteredRecipes(recipes, filteredRecipes);
 }
 
