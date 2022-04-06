@@ -3,21 +3,23 @@ const tagsContainer = document.querySelector(".tags");
 function tagsHandler(data) {
   addTags(data);
   removeTags(data);
-  filterByTags(data);
+  filterRecipesByTags(data);
 }
 
 function addTags(data) {
+  //We add eventListener to all filters listboxes
   filtersList.forEach((filter) => {
     filter.addEventListener("click", (e) => {
       const clickedFilterText = e.target.closest("li").textContent;
       const ingredientTag = `<li class="blue" data-text="${clickedFilterText}">${clickedFilterText}<img src="assets/close.svg" alt="Remove tag" /></li>`;
       const applianceTag = `<li class="green" data-text="${clickedFilterText}">${clickedFilterText}<img src="assets/close.svg" alt="Remove tag" /></li>`;
       const ustensilTag = `<li class="red" data-text="${clickedFilterText}">${clickedFilterText}<img src="assets/close.svg" alt="Remove tag" /></li>`;
-
+      //Get tag that has the same name as clicked filrer
+      //for that we use data-text
       const tag = document.querySelector(
         `[data-text = "${clickedFilterText}"]`
       );
-
+      //Checking where the click event happened so we could add tags by color
       if (filtersList[0].contains(e.target) && !tagsContainer.contains(tag)) {
         tagsContainer.innerHTML += ingredientTag;
       } else if (
@@ -32,36 +34,45 @@ function addTags(data) {
         tagsContainer.innerHTML += ustensilTag;
       }
 
-      filterByTags(data);
+      filterRecipesByTags(data);
     });
   });
 }
 
 function removeTags(data) {
+  //Remvove tag by clicking on the X button and then filter recipes
   tagsContainer.addEventListener("click", (e) => {
     if (e.target.closest("img")) {
       e.target.parentNode.remove();
-      filterByTags(data);
+      filterRecipesByTags(data);
     }
   });
 }
 
-function filterByTags(data) {
+
+function filterRecipesByTags(data) {
   const tagsList = Array.from(tagsContainer.querySelectorAll("li"));
+  //Get tag's name
   const tags = tagsList.map((tag) => {
     return tag.dataset.text;
   });
-
-  const filteredRecipes = data.filter((element) => {
-    const ingredients = element.ingredients.map((el) => {
+  //Use filter method to filter recipes
+  const filteredRecipes = data.filter((recipe) => {
+    const ingredients = recipe.ingredients.map((el) => {
       return el.ingredient;
     });
-    const allFilters = ingredients.concat(element.appliance, element.ustensils);
+    //Concatenate ingredients, appliances and ustensils in a signle array
+    const recipeElements = ingredients.concat(
+      recipe.appliance,
+      recipe.ustensils
+    );
+    //Check if every tag exists in recipe
+    //if "true" we return recipe
     const tagExist = tags.every((tag) => {
-      return allFilters.includes(tag);
+      return recipeElements.includes(tag);
     });
     if (tagExist) {
-      return element;
+      return recipe;
     }
   });
   displayRecipes(filteredRecipes);

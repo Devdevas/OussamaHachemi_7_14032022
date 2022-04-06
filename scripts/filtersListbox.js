@@ -1,64 +1,90 @@
-const filters = document.querySelector(".filters");
+//Get DOM elements
 const filter = document.querySelectorAll(".filters__filter");
 const filtersList = document.querySelectorAll(".filters__list");
 const filtersInput = document.querySelectorAll(".filters__input");
 const arrowUp = document.querySelectorAll(".up");
 const arrowDown = document.querySelectorAll(".down");
 
-function filtersListboxHandler(data) {
+function filtersListboxHandler(recipes) {
+  //Add eventListner to each filter
   filter.forEach((element) => {
     element.addEventListener("click", () => {
-      displayFiltersList(data);
+      displayFiltersList(recipes);
+      closeFilters();
+      //We refer to data-text to open the clicked filter
       if (element.dataset.text === "ingredients") {
-        closeAllFilters();
         openClickedFilter(0, "Rechercher un ingrédient");
       } else if (element.dataset.text === "appliances") {
-        closeAllFilters();
         openClickedFilter(1, "Rechercher un appareil");
       } else if (element.dataset.text === "ustensils") {
-        closeAllFilters();
         openClickedFilter(2, "Rechercher un ustensile");
       }
     });
   });
+  //Close filters when clicking outside in the window
   window.addEventListener("click", (e) => {
     if (!e.target.closest(".filters__filter") || e.target.closest(".up")) {
-      closeAllFilters();
+      closeFilters();
     }
   });
 }
 
-function displayFiltersList(data) {
+//Get filters and remove duplicate ones
+function getFilters(data) {
+  const ingredientsList = [];
+  const appliancesList = [];
+  const ustensilsList = [];
+
+  //Creat new Filter instance for each element and push it
+  data.forEach((element) => {
+    ingredientsList.push(...new Filter(element).ingredient);
+    appliancesList.push(new Filter(element).appliance);
+    ustensilsList.push(...new Filter(element).ustensil);
+  });
+  //Remove duplicate elements using Set object
+  const ingredients = Array.from(new Set(ingredientsList));
+  const appliances = Array.from(new Set(appliancesList));
+  const ustensils = Array.from(new Set(ustensilsList));
+
+  return {
+    ingredients: ingredients,
+    appliances: appliances,
+    ustensils: ustensils,
+  };
+}
+
+function displayFiltersList(recipes) {
   const filtersList = document.querySelectorAll(".filters__filter ul");
-
-  const { ingredients, ustensils, appliances } = getFilters(data);
-
+//Destructuring getFilters() and listen to input event of each filter
+  const { ingredients, ustensils, appliances } = getFilters(recipes);
+//Append all lists when open filter
   filtersList[0].innerHTML = ingredients.join("");
   filtersList[1].innerHTML = appliances.join("");
   filtersList[2].innerHTML = ustensils.join("");
-
+//Filtering filters for each character entred
   filtersInput.forEach((element) => {
     element.addEventListener("input", () => {
-      searchFilters(ingredients, 0);
-      searchFilters(appliances, 1);
-      searchFilters(ustensils, 2);
+      inputSearchFilters(ingredients, 0);
+      inputSearchFilters(appliances, 1);
+      inputSearchFilters(ustensils, 2);
     });
   });
 }
 
-function searchFilters(filterData, i) {
-  const wantedFilter = filterData.filter((element) => {
+function inputSearchFilters(filterType, index) {
+  const wantedFilter = filterType.filter((element) => {
     return (
       element
         .toLowerCase()
-        .includes(`<li>${filtersInput[i].value.toLowerCase()}`) ||
-      element.toLowerCase().includes(filtersInput[i].value.toLowerCase())
+        .includes(`<li>${filtersInput[index].value.toLowerCase()}`) ||
+      element.toLowerCase().includes(filtersInput[index].value.toLowerCase())
     );
   });
-  filtersList[i].innerHTML = wantedFilter.join("");
+  filtersList[index].innerHTML = wantedFilter.join("");
 }
 
-function closeAllFilters() {
+function closeFilters() {
+  //Close opened filter list, change arrow direction and placeholder value
   for (let i = 0; i < 3; i++) {
     filtersList[i].classList.remove("visible");
     arrowDown[i].style.display = "block";
@@ -72,36 +98,10 @@ function closeAllFilters() {
 }
 
 function openClickedFilter(index, placeholderText) {
+  //Show and hide filter list on click
   arrowUp[index].style.display = "block";
   arrowDown[index].style.display = "none";
   filtersList[index].classList.toggle("visible");
   filtersInput[index].placeholder = placeholderText;
   filtersInput[index].classList.add("opacity");
-}
-
-// Remove duplicates filters
-function getFilters(data) {
-  const ingredients = [];
-  const appliances = [];
-  const ustensils = [];
-
-  data.forEach((element) => {
-    if (!ingredients.includes(...new Filter(element).ingredient)) {
-      ingredients.push(...new Filter(element).ingredient);
-    }
-    if (!appliances.includes(new Filter(element).appliance)) {
-      appliances.push(new Filter(element).appliance);
-    }
-    if (!ustensils.includes(...new Filter(element).ustensil)) {
-      ustensils.push(...new Filter(element).ustensil);
-    }
-  });
-  const ingredientsList = Array.from(new Set(ingredients));
-  const ustensilsList = Array.from(new Set(ustensils));
-
-  return {
-    ingredients: ingredientsList,
-    appliances: appliances,
-    ustensils: ustensilsList,
-  };
 }
